@@ -1,0 +1,85 @@
+$white: #EDF0F5;
+$yellow: #EBFF00;
+$dark-blue: #02154C;
+$light-blue: #5283CC;
+$black: #121847;
+$row-number: 15;
+$column-number: 6;
+$cell-width: 55px;
+$cell-height: 45px;
+
+#root {
+  height: 100%;
+  background: linear-gradient($dark-blue, $light-blue);
+}
+
+.page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+}
+
+.header {
+  color: $white;
+  font-size: 50px;
+  font-weight: 400;
+  margin: 10px 50px;
+}
+
+.body {
+  display: flex;
+  flex-direction: row ;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+  width: 100vw;
+}
+
+
+.board {
+  display: grid;
+  background-color: $black;
+  grid-template-columns: repeat($column-number, $cell-width);
+  grid-template-rows: repeat($row-number, $cell-height);
+  border: 2px solid $white;
+}
+
+
+.left-side, .right-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: $yellow;
+  font-size: 25px;
+  font-weight: 300;
+  height: 680px;
+  width: 240px;
+  text-transform: uppercase;
+}
+
+.score {
+  display: flex;
+  flex-direction: column;
+}
+
+.point-value, .level-value {
+  text-transform: none;
+  font-size: 35px;
+  font-weight: 500;
+  margin-bottom: 30px;
+
+}
+
+.fabric-logo {
+  max-height:  60px;
+  margin: 10px;
+  align-self: flex-end;
+}
+
+.website {
+  color: $white;
+  font-size: 15px;
+  margin: 10px;
+  align-self: flex-end;
+}
