@@ -3,10 +3,10 @@ $yellow: #EBFF00;
 $dark-blue: #02154C;
 $light-blue: #5283CC;
 $black: #121847;
-$row-number: 15;
-$column-number: 6;
-$cell-width: 55px;
-$cell-height: 45px;
+$row-number: 20;
+$column-number: 10;
+$cell-width: 45px;
+$cell-height: 28px;
 
 #root {
   height: 100%;
@@ -14,7 +14,6 @@ $cell-height: 45px;
 }
 
 .page {
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -24,7 +23,7 @@ $cell-height: 45px;
   color: $white;
   font-size: 50px;
   font-weight: 400;
-  margin: 10px 50px;
+  margin: 0 50px;
 }
 
 .body {
@@ -39,10 +38,13 @@ $cell-height: 45px;
 
 .board {
   display: grid;
+  place-items: stretch;
+  grid-auto-flow: column;
   background-color: $black;
-  grid-template-columns: repeat($column-number, $cell-width);
+  grid-template-columns:  repeat($column-number, $cell-width);
   grid-template-rows: repeat($row-number, $cell-height);
   border: 2px solid $white;
+  margin: 10px;
 }
 
 
@@ -82,4 +84,28 @@ $cell-height: 45px;
   font-size: 15px;
   margin: 10px;
   align-self: flex-end;
+}
+.t-row {
+  display: inline-grid;
+  grid-template-columns: repeat($column-number, $cell-width);
+
+}
+
+.t-cell {
+  display: inline-block;
+  height: $cell-height;
+  width: $cell-width;
+}
+
+.t-cell-s {
+  background-image: url("assets/smallTote.png");
+  background-size: contain;
+}
+.t-cell-b1 {
+  background-image: url("assets/topBigTote.png");
+  background-size: contain;
+}
+.t-cell-b2{
+  background-image: url("assets/bottomBigTote.png");
+  background-size: contain;
 }
