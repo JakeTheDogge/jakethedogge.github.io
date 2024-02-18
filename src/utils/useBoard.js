@@ -52,7 +52,7 @@ export function useBoard() {
   const [isGameOver, setIsGameOver] = useState(false);
 
   useEffect(updateDisplay, [scene, shape, position]);
-  useEffect(removeFullLines, [scene]);
+  useEffect(removeFullLines, [linesCleared, scene]);
   useInterval(tick, 1000);
 
   function updateDisplay() {
@@ -84,10 +84,6 @@ export function useBoard() {
     if (removedLines > 4) win = 1200;
     setScore(oldScore => oldScore + win)
   };
-
-  const updateLevel = () => {
-    setLevel(Math.floor(linesCleared / 10));
-  }
 
   function removeFullLines() {
 
@@ -132,7 +128,8 @@ export function useBoard() {
     }
     updateScore(removedLines);
     setLinesCleared(old =>  old + removedLines)
-    updateLevel();
+    setLevel(Math.floor(linesCleared / 10));
+
 
 
     if (touched) {
