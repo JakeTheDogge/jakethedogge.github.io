@@ -44,16 +44,17 @@ export function useBoard() {
 
   const [scene, setScene] = useState(() => createEmptyScene());
   const [shape, setShape] = useState(() => getShape());
-  const [position, setPosition] = useState({x: 0, y: 0});
+  const [position, setPosition] = useState({x: 3, y: 0});
   const [display, setDisplay] = useState(() => mergeIntoStage(scene, shape, position));
   const [score, setScore] = useState(0);
   const [linesCleared, setLinesCleared] = useState(0);
   const [level, setLevel] = useState(1);
   const [isGameOver, setIsGameOver] = useState(false);
+  const [delay, setDelay] = useState(1000);
 
   useEffect(updateDisplay, [scene, shape, position]);
-  useEffect(removeFullLines, [linesCleared, scene]);
-  useInterval(tick, 1000);
+  useEffect(removeFullLines, [linesCleared, scene, level]);
+  useInterval(tick, delay);
 
   function updateDisplay() {
     const newDisplay = mergeIntoStage(scene, shape, position);
@@ -69,8 +70,8 @@ export function useBoard() {
   function placeShape() {
     setScene(mergeIntoStage(scene, shape, position));
     setShape(getShape());
-    setPosition({x: 0, y: 0});
-    if(display[0].slice(0,3).some((el) => el !== 0)) {
+    setPosition({x: 3, y: 0});
+    if(display[0].slice(3, 8).some((el) => el !== 0)) {
       setIsGameOver(true);
     }
   }
@@ -93,8 +94,8 @@ export function useBoard() {
 
     const removeRow = (rY) => {
       for (let x = 0; x < COLUMN_COUNT; x++) {
-        if (newScene[rY][x] === 'b1') newScene[rY + 1][x] = 0;
-        if (newScene[rY][x] === 'b2') newScene[rY - 1][x] = 0;
+        if (newScene[rY][x] === 'b1') newScene[rY + 1][x] = 's';
+        if (newScene[rY][x] === 'b2') newScene[rY - 1][x] = 's';
       }
 
       for (let y = rY; y > 0; y--) {
@@ -128,9 +129,11 @@ export function useBoard() {
     }
     updateScore(removedLines);
     setLinesCleared(old =>  old + removedLines)
-    setLevel(Math.floor(linesCleared / 10));
-
-
+    const newLevel = Math.floor(linesCleared / 5);
+    if (level !== newLevel) {
+      setLevel(newLevel);
+      setDelay(delay => delay * 0.8);
+    }
 
     if (touched) {
       setScene(newScene);
@@ -141,23 +144,49 @@ export function useBoard() {
     switch (event.key) {
       case 'ArrowRight':
         movePosition(1, 0);
-        event.preventDefault();
         break;
       case 'ArrowLeft':
         movePosition(-1, 0);
-        event.preventDefault();
         break;
       case 'ArrowDown':
         movePosition(0, 1);
-        event.preventDefault();
         break;
       case 'ArrowUp':
         rotateShape();
-        event.preventDefault();
         break;
       default:
         break;
     }
+    event.preventDefault && event.preventDefault();
+  }
+  const onClick = (event) => {
+      switch (event.key) {
+        case 'ArrowRight':
+          movePosition(1, 0);
+          break;
+        case 'ArrowLeft':
+          movePosition(-1, 0);
+          break;
+        case 'ArrowDown':
+          movePosition(0, 1);
+          break;
+        case 'ArrowUp':
+          rotateShape();
+          break;
+        default:
+          break;
+      }
+  }
+  const restart = () => {
+    setScene(() => createEmptyScene());
+    setShape(() => getShape());
+    setPosition({x: 3, y: 0});
+    setDisplay(() => mergeIntoStage(scene, shape, position));
+    setScore(0);
+    setLinesCleared(0);
+    setLevel (0);
+    setIsGameOver(false);
+    setDelay(1000);
   }
 
   function movePosition(x, y) {
@@ -197,5 +226,5 @@ export function useBoard() {
     });
   }
 
-  return [display, score, level, isGameOver, onKeyDown];
+  return [display, score, level, isGameOver, onKeyDown, onClick, restart];
 }
