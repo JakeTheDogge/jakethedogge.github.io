@@ -10,7 +10,7 @@ $cell-height: 28px;
 
 #root {
   height: 100vh;
-  background: linear-gradient($dark-blue, $light-blue);
+  background: transparent;
   font-family: "DM Sans", sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
@@ -18,61 +18,8 @@ $cell-height: 28px;
   padding: 0;
 }
 
-
 .page {
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-evenly;
-}
-
-.game-over {
-  height: 100vh;
-  width: 100vw;
-  z-index: 2;
-  background-color: rgba(237, 240, 245, 0.5);
-  color: $dark-blue;
-  font-size: 50px;
-  display: grid;
-  grid-template-rows: 1fr;
-  grid-template-columns: 1fr;
-
-}
-
-.game-over-content {
-  place-self: center;
-  text-align: center;
-  display: grid;
-  grid-template-rows: repeat(3, 1fr);
-  grid-template-areas:
-  'header'
-  'body'
-  'button'
-;
-  .game-over-button {
-    color: $white;
-    font-size: 50px;
-    text-align: center;
-    text-transform: uppercase;
-    justify-self: center;
-    align-self: center;
-    cursor: pointer;
-  }
-}
-
-.game-over-header {
-  color: $yellow;
-}
-
-.game-over-text {
-  font-size: 35px;
-}
-
-.header {
-  color: $white;
-  font-size: 50px;
-  font-weight: 400;
-  margin: 0 50px;
 }
 
 .bracket{
@@ -85,12 +32,14 @@ $cell-height: 28px;
 .body {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
+  grid-template-areas: 'right board left';
   width: 100vw;
   justify-items: center;
+  place-self: start;
 }
 
-
 .board {
+  grid-area: board;
   display: grid;
   place-items: stretch;
   grid-auto-flow: column;
@@ -101,6 +50,9 @@ $cell-height: 28px;
   margin: 10px;
 }
 
+.board:focus {
+  outline: none;
+}
 
 .right-side {
   display: inline-flex;
@@ -120,6 +72,8 @@ $cell-height: 28px;
   font-size: 25px;
   font-weight: 300;
   text-transform: uppercase;
+  justify-self: start;
+  margin-bottom: 10px;
 }
 
 .score {
@@ -135,12 +89,15 @@ $cell-height: 28px;
   align-self: center;
   margin: 10px;
 }
+
 .points {
   grid-area: points;
 }
+
 .level{
   grid-area: level;
 }
+
 .point-value, .level-value {
   text-transform: none;
   font-size: 35px;
@@ -148,6 +105,7 @@ $cell-height: 28px;
   margin-bottom: 10px;
   align-self: end;
 }
+
 .point-value{
   grid-area: point-value;
 }
@@ -168,7 +126,8 @@ $cell-height: 28px;
           '. up .'
           'left down right' ;
   align-self: end;
-  column-gap: 3px;
+  justify-self: start;
+  column-gap: 7px;
   row-gap: 3px;
 }
 
@@ -207,18 +166,6 @@ $cell-height: 28px;
   grid-area: right;
 }
 
-.fabric-logo {
-  max-height:  60px;
-  margin: 10px;
-  align-self: end;
-}
-
-.website {
-  color: $white;
-  font-size: 15px;
-  margin: 10px;
-  align-self: flex-end;
-}
 .t-row {
   display: inline-grid;
   grid-template-columns: repeat($column-number, $cell-width);
@@ -234,36 +181,97 @@ $cell-height: 28px;
   background-image: url("assets/smallTote.png");
   background-size: contain;
 }
+
 .t-cell-b1 {
   background-image: url("assets/topBigTote.png");
   background-size: contain;
 }
+
 .t-cell-b2{
   background-image: url("assets/bottomBigTote.png");
   background-size: contain;
 }
 
+.game-over {
+  grid-area: board;
+  height: calc(calc($row-number * $cell-height) + 20px);
+  width: calc(calc($column-number * $cell-width) + 20px);
+  z-index: 2;
+  background-color: rgba(237, 240, 245, 0.1);
+  color: $dark-blue;
+  font-size: 50px;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr;
+
+}
+
+.game-over-content {
+  place-self: center;
+  text-align: center;
+  display: grid;
+  grid-template-rows: repeat(3, 1fr);
+  grid-template-areas:
+  'header'
+  'body'
+  'button'
+;
+  .game-over-button {
+    color: $black;
+    font-size: 50px;
+    text-align: center;
+    text-transform: uppercase;
+    justify-self: center;
+    align-self: center;
+    cursor: pointer;
+  }
+}
+
+.game-over-header {
+  color: $yellow;
+}
+
+.game-over-text {
+  font-size: 35px;
+}
+
 @media screen and (max-width: 700px) {
   #root {
-    height: 100%;
+    height: 100vh;
   }
   $board-height: calc(calc($row-number * 19px) + 60px);
+  $board-width: calc(calc($column-number * 30px) + 20px);
+
   .body {
     display: grid;
     grid-auto-flow: row;
     align-content: start;
     grid-template-columns: repeat(1, 1fr);
     grid-template-rows: 0 $board-height 200px;
+    grid-template-areas:
+            'right'
+            'board'
+            'left'
+  ;
     width: 100vw;
     justify-items: center;
   }
   .board {
+    grid-area: board;
     height: calc($row-number * 19px);
     width: calc($column-number * 30px);
     grid-template-columns:  repeat($column-number, 30px);
     grid-template-rows: repeat($row-number, 19px);
     margin: 30px;
   }
+
+  .game-over {
+    grid-area: board;
+    height: $board-height;
+    width: $board-width;
+  }
+
+
   .t-cell{
     height: 19px;
     width: 30px;
@@ -273,24 +281,17 @@ $cell-height: 28px;
     grid-template-columns: repeat($column-number, 30px);
   }
 
-  .header {
-    align-self: center;
-    margin: 10px
-  }
-
-  .fabric-logo {
-    display: none;
-  }
-
   .buttons{
     align-self: flex-end;
   }
 
   .left-side {
+    grid-area: left;
     grid-auto-flow: row;
     grid-template-rows: repeat(2, 1fr);
     grid-template-columns: repeat(1, 1fr);
     font-size: 20px;
+    place-self: center;
   }
   .point-value, .level-value {
     margin-bottom: 10px;
@@ -310,38 +311,43 @@ $cell-height: 28px;
 
 }
 
-@media screen and (max-width: 850px) {
-  .website {
-    display: none;
-  }
-  .fabric-logo {
-    display: none;
-  }
-}
-
 @media screen and (max-height: 680px) {
   #root {
-    height: 100%;
+    height: 100vh;
   }
   $board-height: calc(calc($row-number * 19px) + 20px);
+  $board-width: calc(calc($column-number * 30px) + 20px);
+
   .body {
     display: grid;
     grid-auto-flow: row;
     align-content: start;
     grid-template-columns: repeat(1, 1fr);
-    grid-template-rows: 0 $board-height 30px;
+    grid-template-rows: 0 $board-height 1fr;
+    grid-template-areas:
+            'right'
+            'board'
+            'left'
+  ;
     width: 100vw;
-    height: 100vh;
     justify-items: center;
   }
 
   .board {
+    grid-area: board;
     height: calc($row-number * 19px);
     width: calc($column-number * 30px);
     grid-template-columns:  repeat($column-number, 30px);
     grid-template-rows: repeat($row-number, 19px);
-    margin: 30px;
+    margin: 10px;
   }
+
+  .game-over {
+    grid-area: board;
+    height: $board-height;
+    width: $board-width;
+  }
+
   .t-cell{
     height: 19px;
     width: 30px;
@@ -351,24 +357,18 @@ $cell-height: 28px;
     grid-template-columns: repeat($column-number, 30px);
   }
 
-  .header {
-    align-self: center;
-    margin: 10px
-  }
-
-  .fabric-logo {
-    display: none;
-  }
-
   .buttons{
     align-self: flex-end;
+    margin: 0 15px;
   }
 
   .left-side {
+    grid-area: left;
     grid-auto-flow: row;
     grid-template-rows: repeat(2, 1fr);
     grid-template-columns: repeat(1, 1fr);
     font-size: 20px;
+    place-self: center;
   }
   .point-value, .level-value {
     margin-bottom: 10px;
@@ -384,17 +384,5 @@ $cell-height: 28px;
           'points level'
           'point-value level-value';
     column-gap: 30px;
-  }
-
-  .body {
-    grid-template-rows: 0 $board-height 30px;
-  }
-
-  .buttons {
-    margin: 0 15px;
-  }
-
-  .board {
-    margin: 10px;
   }
 }
